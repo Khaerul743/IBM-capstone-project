@@ -1,5 +1,5 @@
 import pandas as pd
-from models import AgentState
+from agent.models import AgentState
 
 
 def beauty_output(path: str):

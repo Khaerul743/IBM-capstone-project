@@ -10,14 +10,15 @@ from langchain_openai import ChatOpenAI
 from langgraph.checkpoint.memory import MemorySaver
 from langgraph.graph import END, START, StateGraph
 from langgraph.prebuilt import ToolNode
-from models import (
+
+from agent.models import (
     AgentState,
     ColumnsStructuredOutput,
     MainAgentStructuredOutput,
 )
-from prompts import AgentPrompts
-from tools import Tools
-from utils.data_format import data_context_format
+from agent.prompts import AgentPrompts
+from agent.tools import Tools
+from agent.utils.data_format import data_context_format
 
 load_dotenv()
 

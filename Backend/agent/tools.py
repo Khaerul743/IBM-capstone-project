@@ -1,7 +1,8 @@
 import numpy as np
 from langchain_core.tools import tool
 from scipy import stats
-from utils.data_format import beauty_output
+
+from agent.utils.data_format import beauty_output
 
 
 class Tools:
