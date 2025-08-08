@@ -11,7 +11,7 @@ class Tools:
     def get_data():
         """Gunakan ini jika kamu ingin mengambil data dari user"""
         try:
-            data = beauty_output("../data/pengeluaran.csv")
+            data = beauty_output("data/pengeluaran.csv")
         except Exception as e:
             print(f"Terjadi kesalahan ketika agent memakai tool: {e}")
             return "Terjadi kesalahan saat mengambil data."

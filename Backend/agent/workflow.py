@@ -47,6 +47,7 @@ class Agent:
         graph.add_node("analysis_data", self._agent_analysis)
         graph.add_node("agent_insight", self._agent_data_insight)
         graph.add_node("agent_classification", self._agent_classification)
+        graph.add_node("final_output", self._final_output)
 
         graph.add_edge(START, "main_agent")
         graph.add_conditional_edges(
@@ -62,7 +63,8 @@ class Agent:
         graph.add_edge("agent_data_desc", "analysis_data")
         graph.add_edge("analysis_data", "agent_insight")
         graph.add_edge("agent_insight", "agent_classification")
-        graph.add_edge("agent_classification", END)
+        graph.add_edge("agent_classification", "final_output")
+        graph.add_edge("final_output", END)
 
         return graph.compile(checkpointer=self.memory)
 
@@ -177,6 +179,21 @@ class Agent:
         response = llm.invoke(prompt)
         print(f"===============AGENT CLASSIFICATION=============\n{response}")
         return {"data_classification": response}
+
+    def _final_output(self, state: AgentState) -> Dict[str, Any]:
+        output = f"""
+Berikut adalah hasil dari analisis yang telah saya lakukan:
+
+{state.data_description}
+
+**Hasil klasifikasi data**
+{state.data_classification}
+
+{state.data_stats}
+
+{state.insight}
+"""
+        return {"the_answer": output}
 
     def run(self, state: AgentState, thread_id: str):
         return self.build.invoke(
