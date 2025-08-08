@@ -70,17 +70,26 @@ class Agent:
         if state.is_analyis:
             return {"can_answer": False}
         agentPrompts = self.prompts.main_agent()
-        llm = self.llm_for_explanation.with_structured_output(MainAgentStructuredOutput)
-        human = HumanMessage(content=state.user_query)
-        response = llm.invoke(agentPrompts + state.messages + [human])
-        print(f"===============MAIN AGENT=============\n{response.the_answer}")
-        return {
-            "can_answer": response.can_answer,
-            "the_answer": response.the_answer,
-            "messages": state.messages
-            + [human]
-            + [AIMessage(content=response.the_answer)],
-        }
+        try:
+            llm = self.llm_for_explanation.with_structured_output(
+                MainAgentStructuredOutput
+            )
+            human = HumanMessage(content=state.user_query)
+            response = llm.invoke(agentPrompts + state.messages + [human])
+            print(f"===============MAIN AGENT=============\n{response.the_answer}")
+            return {
+                "can_answer": response.can_answer,
+                "the_answer": response.the_answer,
+                "messages": state.messages
+                + [human]
+                + [AIMessage(content=response.the_answer)],
+            }
+        except Exception as e:
+            print(f"Terjadi error di main agent: {str(e)}")
+            return {
+                "can_answer": True,
+                "the_answer": "Halo!, ada yang bisa saya bantu?",
+            }
 
     def _main_agent_router(self, state: AgentState) -> str:
         can_answer = state.can_answer
@@ -100,7 +109,10 @@ class Agent:
         ==============================RESPONSE========================
         {response.content}
 """)
-        return {"messages": state.messages + [human] + [response]}
+        return {
+            "messages": state.messages + [human] + [response],
+            "the_answer": response.content,
+        }
 
     def _should_continue(self, state: AgentState):
         last_message = state.messages[-1]
