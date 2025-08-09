@@ -10,3 +10,6 @@ class MyAgent:
         if not user_query:
             raise RuntimeError("User query is required")
         return self.agent.run({"user_query": user_query}, self.thread_id)
+
+    def show(self):
+        return self.agent.show()

@@ -1,7 +1,9 @@
 import os
+import tempfile
 from typing import Any, Dict
 
 from dotenv import load_dotenv
+from IPython.display import Image
 from langchain.agents import AgentExecutor, create_tool_calling_agent
 from langchain_community.llms import Replicate
 from langchain_core.messages import AIMessage, HumanMessage, ToolMessage
@@ -200,14 +202,19 @@ Berikut adalah hasil dari analisis yang telah saya lakukan:
             state, config={"configurable": {"thread_id": thread_id}}
         )
 
+    def show(self):
+        with open("workflow.png", "wb") as f:
+            f.write(self.build.get_graph().draw_mermaid_png())
+
 
 if __name__ == "__main__":
     wf = Agent()
-    thread = "thread_123"
-    while True:
-        user_input = input("Human: ")
-        if user_input == "exit":
-            break
-        result1 = wf.run({"user_query": user_input}, thread)
+    # thread = "thread_123"
+    # while True:
+    #     user_input = input("Human: ")
+    #     if user_input == "exit":
+    #         break
+    #     result1 = wf.run({"user_query": user_input}, thread)
 
-    print(result1)
+    # print(result1)
+    wf.show()

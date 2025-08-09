@@ -19,7 +19,6 @@ app.add_middleware(
 
 agent = MyAgent("thread_123")
 
-
 class UserMessage(BaseModel):
     user_message: str
 
